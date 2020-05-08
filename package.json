@@ -1,0 +1,11 @@
+{
+  "name": "servidornode",
+  "version": "1.0.0",
+  "description": "servidor reful para realizar pruebas con frones en reac angulay y vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mario F robayo",
+  "license": "MIT"
+}
