@@ -313,7 +313,7 @@ const controller = {
             msg: "error al actualizar",
           });
         }
-        if (!art) {
+        if (!art || art.length <= 0) {
           return res.status(404).send({
             status: "error",
             msg: "no existe el articulo",
