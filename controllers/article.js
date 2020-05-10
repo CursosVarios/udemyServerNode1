@@ -63,8 +63,15 @@ const controller = {
   },
   getArticles: (req, res) => {
     //find
-    console.log("hola");
-    Article.find({})
+    const last = req.params.last;
+    let query = Article.find({});
+    if (last || last != undefined) {
+      query.limit(5);
+    }
+
+    query
+      .find(query)
+      .sort("-_id")
       .exec()
       .then((articles) => {
         if (!articles) {

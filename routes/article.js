@@ -9,5 +9,5 @@ router.get("/test", ArticleController.test);
 router.get("/test2", ArticleController.datosCurso);
 router.get("/test3", ArticleController.master);
 router.post("/save", ArticleController.save);
-router.get("/articles", ArticleController.getArticles);
+router.get("/articles/:last?", ArticleController.getArticles);
 module.exports = router;
