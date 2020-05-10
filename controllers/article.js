@@ -1,6 +1,8 @@
 "use strict";
 const validator = require("validator");
 const Article = require("../models/articles");
+const fs = require("fs");
+const path = require("path");
 
 const controller = {
   datosCurso: (req, res) => {
@@ -199,6 +201,80 @@ const controller = {
         msg: articleremove,
       });
     });
+  },
+  upload: (req, res) => {
+    const articleId = req.params.id;
+
+    if (!articleId || articleId == null) {
+      return res.status(404).send({
+        status: "error",
+        msg: "por favor agregar un id",
+      });
+    }
+    //configurar conect.multiparter
+
+    //recoger fichero
+
+    let fileName = "imagen no subidad";
+
+    if (!req.files) {
+      return res.status(500).send({
+        status: "error",
+        msg: "no hay imagen",
+      });
+    }
+    const filePath = req.files.file0.path;
+    const fileSplit = filePath.split("\\");
+    console.log(req.files);
+
+    fileName = req.files.file0.name;
+    const extension = fileName.split(".")[1];
+
+    if (
+      extension == "png" ||
+      extension == "jpg" ||
+      extension == "jpeg" ||
+      extension == "gif"
+    ) {
+      Article.findOneAndUpdate(
+        { _id: articleId },
+        { image: fileName },
+        { new: true },
+        (err, articleUpdate) => {
+          if (err) {
+            return res.status(500).send({
+              status: "error",
+              msg: "error al actualizar",
+            });
+          }
+          if (!articleUpdate) {
+            return res.status(404).send({
+              status: "error",
+              msg: "no existe el articulo",
+            });
+          }
+
+          return res.status(200).send({
+            status: "success",
+            msg1: "archivo guardado correctamente",
+            msg: articleUpdate,
+            fileName,
+            extension,
+          });
+        }
+      );
+    } else {
+      //consegir nombre y extencion
+
+      fs.unlink(filePath, (err) => {
+        return res.status(404).send({
+          status: "error",
+          msg: "no es un formato valido",
+          fileName,
+          err,
+        });
+      });
+    }
   },
 };
 
