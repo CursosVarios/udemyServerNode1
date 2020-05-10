@@ -171,6 +171,35 @@ const controller = {
       }
     );
   },
+  delete: (req, res) => {
+    const articleId = req.params.id;
+
+    if (!articleId || articleId == null) {
+      return res.status(404).send({
+        status: "error",
+        msg: "por favor agregar un id",
+      });
+    }
+    Article.findOneAndDelete({ _id: articleId }, (err, articleremove) => {
+      if (err) {
+        return res.status(500).send({
+          status: "error",
+          msg: "erro al borrar",
+        });
+      }
+      if (!articleremove) {
+        return res.status(500).send({
+          status: "error",
+          msg: "erro al borrar",
+        });
+      }
+
+      return res.status(200).send({
+        status: "success",
+        msg: articleremove,
+      });
+    });
+  },
 };
 
 module.exports = controller;
