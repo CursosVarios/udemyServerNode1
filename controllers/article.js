@@ -224,7 +224,7 @@ const controller = {
       });
     }
     const filePath = req.files.file0.path;
-    const fileSplit = filePath.split("\\");
+    const fileSplit = filePath.split("\\")[2];
     console.log(req.files);
 
     fileName = req.files.file0.name;
@@ -238,7 +238,7 @@ const controller = {
     ) {
       Article.findOneAndUpdate(
         { _id: articleId },
-        { image: fileName },
+        { image: fileSplit },
         { new: true },
         (err, articleUpdate) => {
           if (err) {
@@ -275,6 +275,26 @@ const controller = {
         });
       });
     }
+  },
+  getImage: (req, res) => {
+    const file = req.params.image;
+    if (!file || file == null) {
+      return res.status(404).send({
+        status: "error",
+        msg: "por favor indicar imagen",
+      });
+    }
+    const path_file = `./upload/articles/${file}`;
+
+    fs.exists(path_file, (exists) => {
+      if (!exists) {
+        return res.status(200).send({
+          status: "success",
+          msg: "la imagen  no existe",
+        });
+      }
+      return res.status(200).sendFile(path.resolve(path_file));
+    });
   },
 };
 
