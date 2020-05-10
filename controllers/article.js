@@ -118,6 +118,59 @@ const controller = {
       });
     });
   },
+  update: (req, res) => {
+    const articleId = req.params.id;
+    const params = req.body;
+
+    if (!articleId || articleId == null) {
+      return res.status(404).send({
+        status: "error",
+        msg: "por favor agregar un id",
+      });
+    }
+    let validate_title = false;
+    let validate_content = false;
+    try {
+      validate_title = !validator.isEmpty(params.title);
+      validate_content = !validator.isEmpty(params.content);
+    } catch (err) {
+      return res.status(400).send({
+        status: "error",
+        msg: "faltan datos",
+      });
+    }
+
+    if (!(validate_title || validate_content)) {
+      return res.status(404).send({
+        status: "error",
+        msg: "alguno de los elemntos esta vacio",
+      });
+    }
+    Article.findOneAndUpdate(
+      { _id: articleId },
+      params,
+      { new: true },
+      (err, articleUpdate) => {
+        if (err) {
+          return res.status(500).send({
+            status: "error",
+            msg: "error al actualizar",
+          });
+        }
+        if (!articleUpdate) {
+          return res.status(404).send({
+            status: "error",
+            msg: "no existe el articulo",
+          });
+        }
+
+        return res.status(200).send({
+          status: "success",
+          msg: articleUpdate,
+        });
+      }
+    );
+  },
 };
 
 module.exports = controller;
