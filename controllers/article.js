@@ -68,27 +68,25 @@ const controller = {
     if (last || last != undefined) {
       query.limit(5);
     }
-
     query
       .find(query)
       .sort("-_id")
-      .exec()
-      .then((articles) => {
-        if (!articles) {
-          return res.status(404).send({
+      .exec((error, article) => {
+        if (error) {
+          return res.status(500).send({
             status: "error",
-            msg: "articulos vacios",
+            msg: "error al traer el articulo(s)",
           });
         }
-        return res.status(500).send({
-          status: "sucess",
-          articles,
-        });
-      })
-      .catch((err) => {
-        return res.status(500).send({
-          status: "error",
-          err,
+        if (!article) {
+          return res.status(404).send({
+            status: "error",
+            msg: "no se encontor articulo(s) ",
+          });
+        }
+        return res.status(200).send({
+          status: "success",
+          article,
         });
       });
   },
@@ -104,18 +102,18 @@ const controller = {
     Article.findById(articleId).exec((error, article) => {
       if (error) {
         return res.status(500).send({
-          status: "error ",
+          status: "error",
           msg: "error al traer el articulo",
         });
       }
       if (!article) {
         return res.status(404).send({
-          status: "error ",
+          status: "error",
           msg: "no se encontor un articulo con ese id",
         });
       }
       return res.status(200).send({
-        status: "sucess ",
+        status: "success",
         article,
       });
     });
