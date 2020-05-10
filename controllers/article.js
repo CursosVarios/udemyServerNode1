@@ -296,6 +296,36 @@ const controller = {
       return res.status(200).sendFile(path.resolve(path_file));
     });
   },
+  search: (req, res) => {
+    const searchString = req.params.search;
+
+    Article.find({
+      $or: [
+        { title: { $regex: searchString, $options: "i" } },
+        { content: { $regex: searchString, $options: "i" } },
+      ],
+    })
+      .sort([["date", "descending"]])
+      .exec((err, art) => {
+        if (err) {
+          return res.status(500).send({
+            status: "error",
+            msg: "error al actualizar",
+          });
+        }
+        if (!art) {
+          return res.status(404).send({
+            status: "error",
+            msg: "no existe el articulo",
+          });
+        }
+        return res.status(200).send({
+          status: "success",
+          msg: "",
+          art,
+        });
+      });
+  },
 };
 
 module.exports = controller;
