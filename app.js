@@ -5,6 +5,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 // ejecutar expresss HTMLOutputElementcargar archivos rutas
 const app = express();
+
+//cargar ficehros de rutas
+const routeArticles = require("./routes/article");
+
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -12,14 +16,9 @@ app.use(bodyParser.json());
 
 // prefiijos alas rutas
 
+//añadir prefijo de rutas
+app.use("/api/", routeArticles);
 // ruta mo metodo de prueba para api rest
-app.get("/pp", (req, res) => {
-  console.log("hola mundo");
-  return res.status(200).send({
-    curso: "master",
-    url: "dsada",
-  });
-});
 
 // export default app;
 module.exports = app;
