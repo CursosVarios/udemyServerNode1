@@ -1,11 +1,12 @@
-"use strict";
+'use strict';
 const mogoose = require("mongoose");
 const app = require("./app");
-const port = 3900;
+const port = 8080;
 
 const urlDB = "mongodb://localhost:27017/curso_api_rest_blog";
 const optionDB = {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 mogoose.set("useFindAndModify", false);
 mogoose.Promise = global.Promise;

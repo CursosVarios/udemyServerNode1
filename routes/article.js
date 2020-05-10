@@ -8,5 +8,6 @@ const router = express.Router();
 router.get("/test", ArticleController.test);
 router.get("/test2", ArticleController.datosCurso);
 router.get("/test3", ArticleController.master);
-
+router.post("/save", ArticleController.save);
+router.get("/articles", ArticleController.getArticles);
 module.exports = router;

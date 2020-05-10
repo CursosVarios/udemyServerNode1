@@ -1,6 +1,6 @@
 "use strict";
-
-const mongoose = require("mongoose");
+const validator = require("validator");
+const Article = require("../models/articles");
 
 const controller = {
   datosCurso: (req, res) => {
@@ -21,6 +21,71 @@ const controller = {
       curso: "master",
       url: "dsada",
     });
+  },
+  save: (req, res) => {
+    //recoger pamarametrso por post
+    let params = req.body;
+    let validate_title = false;
+    let validate_content = false;
+
+    // Validar datos
+    try {
+      validate_title = !validator.isEmpty(params.title);
+      validate_content = !validator.isEmpty(params.content);
+    } catch (error) {
+      return res.status(300).send({
+        msg: "Faltan datos por enviar",
+      });
+    }
+    //si alguno dato esta vacio
+    if (!(validate_content && validate_title)) {
+      return res.status(300).send({
+        msg: "alguno de los datos esta vacio",
+      });
+    }
+    const article = new Article();
+    // asignar valores
+    article.title = params.title;
+    article.content = params.content;
+    article.image = null;
+    // guardar artiulo
+    article.save((err, articleStored) => {
+      if (err || !articleStored) {
+        return res.status(404).send({
+          msg: "datos no son validos",
+        });
+      }
+    });
+    // devolver respuesta
+    return res.status(200).send({
+      article: article,
+    });
+  },
+  getArticles: (req, res) => {
+    //find
+    console.log("hola");
+    Article.find({})
+      .exec()
+      .then((articles) => {
+        if (!articles) {
+          return res.status(404).send({
+            status: "error",
+            msg: "articulos vacios",
+          });
+        }
+        console.log("hola");
+        console.log(articles);
+
+        return res.status(500).send({
+          status: "sucess",
+          articles,
+        });
+      });
+
+    // return res.status(200).send({
+    //   status: "error",
+    //   msg: "datos no validos",
+    // });
   },
 };
 
