@@ -10,4 +10,5 @@ router.get("/test2", ArticleController.datosCurso);
 router.get("/test3", ArticleController.master);
 router.post("/save", ArticleController.save);
 router.get("/articles/:last?", ArticleController.getArticles);
+router.get("/article/:id", ArticleController.getArticle);
 module.exports = router;
