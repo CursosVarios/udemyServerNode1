@@ -73,19 +73,17 @@ const controller = {
             msg: "articulos vacios",
           });
         }
-        console.log("hola");
-        console.log(articles);
-
         return res.status(500).send({
           status: "sucess",
           articles,
         });
+      })
+      .catch((err) => {
+        return res.status(500).send({
+          status: "error",
+          err,
+        });
       });
-
-    // return res.status(200).send({
-    //   status: "error",
-    //   msg: "datos no validos",
-    // });
   },
 };
 
