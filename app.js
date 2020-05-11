@@ -13,7 +13,17 @@ const routeArticles = require("./routes/article");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // cors
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Oring", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Authorization, X-API-KEY, Origin, X-Request-with, Content-Type, Accept, Access-control-Allow-Request-Method"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
 
+  next();
+});
 // prefiijos alas rutas
 
 //añadir prefijo de rutas
